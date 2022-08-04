@@ -13,6 +13,10 @@ Rails.application.routes.draw do
         post :buy
       end
     end
-    resources :reservations, only: %i(index, create)
+    resources :reservations, only: %i(index, create) do
+      collection do
+        post :purchase_ticket
+      end
+    end
   end
 end
