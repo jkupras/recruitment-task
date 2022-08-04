@@ -11,6 +11,10 @@ class EventsController < ApiController
     render :show
   end
 
+  def available
+    @events = Event.joins(:ticket).where("time > ? AND available > ?", Time.now, 0)
+  end
+
   private
 
   def set_event
