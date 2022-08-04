@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     resources :events, only: %i(index show) do
       collection do
         get :available
+        get '/:id/tickets' => 'events#tickets'
       end
     end
 

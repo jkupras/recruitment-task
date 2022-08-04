@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ReservationsController < ApplicationController
-
   def create
     @reservation = Reservation.new(reservations_params)
     if ticket_avalable? && @reservation.save
