@@ -3,7 +3,9 @@
 class ReservationsController < ApplicationController
   def create
     @reservation = Reservation.new(reservations_params)
-    if ticket_avalable? && @reservation.save
+    if @reservation.invalid?
+      render json: { error: "Ticket not found." }, status: :not_found
+    elsif ticket_avalable? && @reservation.save
       render json: { success: "Reservation created succeeded." }
     else
       render json: { error: "Reservation can not be created." }, status: :unprocessable_entity
