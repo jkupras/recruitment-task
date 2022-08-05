@@ -61,6 +61,49 @@ RSpec.describe "Events", type: :request do
       it_behaves_like "event not found"
     end
   end
+
+  describe "GET events#available" do
+    subject { get "/events/available" }
+
+    let(:event) { Event.first }
+
+    before { subject }
+
+    it "should have correct HTTP status" do
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "should have correct size" do
+      expect(response_json.size).to eq(1)
+    end
+
+    it "returns the events list" do
+      expect(response_json[:events][0][:name]).to eq(event.name)
+    end
+  end
+
+  describe "GET events#tickets" do
+    subject { get "/events/tickets" }
+
+    let!(:reservation) { create(:reservation, purchased_status: true) }
+
+    before do
+      get "/events/#{reservation.event.id}/tickets"
+    end
+
+    it "should have correct HTTP status" do
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "should have correct size" do
+      expect(response_json.size).to eq(1)
+    end
+
+    it "returns ticket list with status" do
+      expect(response_json[:event_ticket].size).to eq(1)
+      expect(response_json[:event_ticket][0][:purchased_status]).to eq(true)
+    end
+  end
 end
 
 def response_json

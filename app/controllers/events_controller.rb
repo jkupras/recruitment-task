@@ -11,6 +11,14 @@ class EventsController < ApiController
     render :show
   end
 
+  def available
+    @events = Event.joins(:ticket).where("time > ? AND available > ?", Time.now, 0)
+  end
+
+  def tickets
+    @tickets = Event.find(params[:id]).reservations.where("reservations.created_at > ? OR purchased_status = ?", Time.now - 15.minutes, true)
+  end
+
   private
 
   def set_event
